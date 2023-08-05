@@ -26,7 +26,7 @@ jobs:
       packages: write
     outputs:
       sdk_version: ${{ env.sdk_version }}
-      image_name: ghcr.io/${{ steps.lower.outputs.repository_owner }}/silabs-firmware-builder:${{ env.sdk_version }}
+      image_name: ghcr.io/${{ steps.lower.outputs.repository_owner }}/silabs-test:${{ env.sdk_version }}
     steps:
       - name: Repository owner lowercase
         id: lower
