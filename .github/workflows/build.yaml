@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      pull-requests: read
     outputs:
       sdk_version: ${{ env.sdk_version }}
       image_name: ghcr.io/${{ steps.lower.outputs.repository_owner }}/silabs-test:${{ env.sdk_version }}
@@ -33,7 +34,14 @@ jobs:
         id: lower
         run: |
           echo "repository_owner=$(echo $GITHUB_REPOSITORY_OWNER | tr [:upper:] [:lower:])" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v3.3.0
+      - uses: actions/checkout@v3.5.3
+      - name: Get Pull Request Number
+        if: ${{ github.event_name == 'pull_request' }}
+        id: pr
+        run: |
+          echo "pr_num ${{ github.event.pull_request.number }}"
+          echo "ref: ${{ github.event.pull_request.head.sha }}"
+          echo "pr_tag=-#${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
       - name: Log in to the GitHub container registry
         uses: docker/login-action@v2.1.0
         with:
