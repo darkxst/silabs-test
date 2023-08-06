@@ -37,7 +37,6 @@ jobs:
           owner=$(echo $GITHUB_REPOSITORY_OWNER | tr [:upper:] [:lower:])
           echo "repository_owner=$owner" >> $GITHUB_OUTPUT
           echo "base_name=ghcr.io/$owner/silabs-scratch"  >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v3.5.3
       - name: Get Pull Request Number
         if: ${{ env.is_pr }}
         id: pr
@@ -55,7 +54,6 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v3.3.0
         with:
-          context: .
           file: Dockerfile
           tags: ${{ steps.lower.outputs.base_name }}:${{ env.sdk_version }}${{ steps.pr.outputs.pr_tag }}
           cache-from: ${{ steps.lower.outputs.base_name }}:cache-${{ env.sdk_version }}${{ steps.pr.outputs.pr_tag }}
