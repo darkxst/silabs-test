@@ -18,6 +18,7 @@ on:
 
 env:
   sdk_version: 4.3.1
+  is_pr: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-container:
@@ -35,10 +36,10 @@ jobs:
         run: |
           owner=$(echo $GITHUB_REPOSITORY_OWNER | tr [:upper:] [:lower:])
           echo "repository_owner=$owner" >> $GITHUB_OUTPUT
-          echo "base_name=ghcr.io/$owner/silabs-test"  >> $GITHUB_OUTPUT
+          echo "base_name=ghcr.io/$owner/silabs-scratch"  >> $GITHUB_OUTPUT
       - uses: actions/checkout@v3.5.3
       - name: Get Pull Request Number
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ env.is_pr }}
         id: pr
         run: |
           echo "Pull request number: ${{ github.event.pull_request.number }}"
