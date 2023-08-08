@@ -77,9 +77,13 @@ jobs:
           cache-from: ${{ steps.meta.outputs.cache_name }}
           cache-to: ${{ steps.meta.outputs.cache_name }}
           no-cache: ${{ env.is_pr }}
-          push: true
+          push: false
+          load: true
           build-args:
             "GECKO_SDK_VERSION=v${{ env.sdk_version }}"
+      - name: Push container (workaround buildx not supporting chunked uploads)
+        run: docker push ${{ steps.meta.outputs.image_name }}
+        shell: bash
 
   ezsp-firmware-build:
     name: EmberZNet NCP
