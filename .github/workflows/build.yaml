@@ -48,7 +48,7 @@ jobs:
         run: |
           if [ "${{ env.is_pr }}" ]; then
             uuid=$(uuidgen)
-            image_name=ttl.sh/${uuid}:2h
+            image_name=silabs-firmware-builder:${{ env.sdk_version }}
             cache_name=""
             echo "PR - Image name: ${image_name}"
           else
@@ -82,7 +82,7 @@ jobs:
           load: true
           build-args:
             "GECKO_SDK_VERSION=v${{ env.sdk_version }}"
-      - name: Push container (workaround buildx not supporting chunked uploads)
+      - name: Push container
         if: ${{ !env.is_pr }}
         run: docker push ${{ steps.meta.outputs.image_name }}
         shell: bash
